@@ -85,8 +85,59 @@ public class BarrelResourceGenerator extends DynClientResourcesGenerator {
     private void generateBarrelTexture(ResourceManager manager, String barrelId, String part, Palette plankPalette) throws Exception {
         ResourceLocation baseLoc = ResourceLocation.fromNamespaceAndPath(BarrelExpansion.MODID, "block/gray_barrel_" + part);
         try (TextureImage baseImage = TextureImage.open(manager, baseLoc)) {
+            int[] savedPixels = null;
+            if(part.contains("top")) {
+                savedPixels = new int[4];
+                int idx = 0;
+                for(int x = 3; x <= 4; x++) {
+                    for(int y = 8; y <= 9; y++) {
+                        savedPixels[idx++] = baseImage.getFramePixel(0, x, y);
+                    }
+                }
+            } else if(part.equals("side")) {
+                savedPixels = new int[64]; // 16*2 + 16*2 pixels
+                int idx = 0;
+                // Save top strip
+                for(int x = 0; x < 16; x++) {
+                    for(int y = 3; y <= 4; y++) {
+                        savedPixels[idx++] = baseImage.getFramePixel(0, x, y);
+                    }
+                }
+                // Save bottom strip
+                for(int x = 0; x < 16; x++) {
+                    for(int y = 11; y <= 12; y++) {
+                        savedPixels[idx++] = baseImage.getFramePixel(0, x, y);
+                    }
+                }
+            }
+
             Respriter respriter = Respriter.of(baseImage);
             TextureImage recolored = respriter.recolor(plankPalette);
+
+            if(savedPixels != null) {
+                int idx = 0;
+                if(part.contains("top")) {
+                    for(int x = 3; x <= 4; x++) {
+                        for(int y = 8; y <= 9; y++) {
+                            recolored.setFramePixel(0, x, y, savedPixels[idx++]);
+                        }
+                    }
+                } else if(part.equals("side")) {
+                    // Restore top strip
+                    for(int x = 0; x < 16; x++) {
+                        for(int y = 3; y <= 4; y++) {
+                            recolored.setFramePixel(0, x, y, savedPixels[idx++]);
+                        }
+                    }
+                    // Restore bottom strip
+                    for(int x = 0; x < 16; x++) {
+                        for(int y = 11; y <= 12; y++) {
+                            recolored.setFramePixel(0, x, y, savedPixels[idx++]);
+                        }
+                    }
+                }
+            }
+
             this.dynamicPack.addAndCloseTexture(
                     ResourceLocation.fromNamespaceAndPath(BarrelExpansion.MODID, "block/" + barrelId + "_" + part),
                     recolored

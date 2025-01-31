@@ -1,5 +1,6 @@
 package com.leclowndu93150.barrel_expansion;
 
+import com.leclowndu93150.barrel_expansion.datagen.BarrelDataGenerator;
 import com.leclowndu93150.barrel_expansion.datagen.BarrelResourceGenerator;
 import com.leclowndu93150.barrel_expansion.events.VanillaBarrels;
 import com.leclowndu93150.barrel_expansion.registry.BarrelRegistries;
@@ -22,6 +23,7 @@ public class BarrelExpansion {
         BarrelRegistries.BLOCK_ENTITIES.register(modEventBus);
         VanillaBarrels.init();
         BarrelResourceGenerator.init();
+        BarrelDataGenerator.init();
         //modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 

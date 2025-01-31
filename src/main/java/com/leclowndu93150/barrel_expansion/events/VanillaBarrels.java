@@ -12,7 +12,6 @@ public class VanillaBarrels {
 
     public static void init() {
         register("oak", MapColor.WOOD);
-        register("spruce", MapColor.PODZOL);
         register("birch", MapColor.SAND);
         register("jungle", MapColor.DIRT);
         register("acacia", MapColor.COLOR_ORANGE);
