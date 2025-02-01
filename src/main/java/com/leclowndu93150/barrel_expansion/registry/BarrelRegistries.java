@@ -36,6 +36,10 @@ public class BarrelRegistries {
     );
 
     public static BarrelRegistryGroup registerBarrel(String name, MapColor color) {
+        if (BARRELS.containsKey(name)) {
+            return BARRELS.get(name);
+        }
+
         DeferredBlock<CustomBarrelBlock> block = BLOCKS.register(name,
                 () -> new CustomBarrelBlock(BlockBehaviour.Properties.of().mapColor(color).strength(2.5F), name));
 

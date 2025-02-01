@@ -100,8 +100,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     implementation "curse.maven:selene-499980:6142532"
-    implementation "curse.maven:jei-238222:5846880"
 
+    runtimeOnly "curse.maven:jei-238222:5846880"
     runtimeOnly "curse.maven:biomes-o-plenty-220318:5855568"
     runtimeOnly "curse.maven:glitchcore-955399:5660740"
     runtimeOnly "curse.maven:terrablender-neoforge-940057:6054947"
