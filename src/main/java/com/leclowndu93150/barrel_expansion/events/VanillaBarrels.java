@@ -26,6 +26,6 @@ public class VanillaBarrels {
     private static void register(String woodType, MapColor color) {
         ResourceLocation planksId = ResourceLocation.fromNamespaceAndPath("minecraft", woodType + "_planks");
         VANILLA_BARRELS.put(woodType, new BarrelInfo(woodType, "minecraft", color, planksId));
-        BarrelRegistries.registerBarrel(woodType + "_barrel", color);
+        BarrelRegistries.registerBarrel(woodType, planksId, color);
     }
 }
