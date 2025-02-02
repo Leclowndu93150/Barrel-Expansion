@@ -35,8 +35,10 @@ public class BarrelEvents {
             if (isWoodType(blockId)) {
                 String woodType = extractWoodType(blockId);
                 MapColor color = getColorForWood(woodType);
+                String barrelId = woodType + "_barrel";
 
-                BarrelRegistries.registerBarrel(woodType + "_barrel", color);
+                BarrelRegistries.registerDirectBarrel(barrelId, color, registry);
+
                 REGISTERED_BARRELS.put(woodType, new BarrelInfo(
                         woodType,
                         blockId.getNamespace(),

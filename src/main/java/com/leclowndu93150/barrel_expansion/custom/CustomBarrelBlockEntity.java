@@ -18,6 +18,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,7 +53,13 @@ public class CustomBarrelBlockEntity extends RandomizableContainerBlockEntity {
     };
 
     public CustomBarrelBlockEntity(BlockPos pos, BlockState state) {
-        super(BarrelRegistries.BARRELS.get(((CustomBarrelBlock)state.getBlock()).getRegistryName()).blockEntity().value(), pos, state);
+        super(getBlockEntityType(((CustomBarrelBlock)state.getBlock()).getRegistryName()), pos, state);
+    }
+
+    private static BlockEntityType<CustomBarrelBlockEntity> getBlockEntityType(String name) {
+        return BarrelRegistries.BARRELS.containsKey(name) ?
+                BarrelRegistries.BARRELS.get(name).blockEntity().value() :
+                BarrelRegistries.DIRECT_BARRELS.get(name).blockEntity();
     }
 
     @Override

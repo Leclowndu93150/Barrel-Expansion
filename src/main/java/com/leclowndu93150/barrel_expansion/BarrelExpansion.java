@@ -5,9 +5,12 @@ import com.leclowndu93150.barrel_expansion.datagen.BarrelResourceGenerator;
 import com.leclowndu93150.barrel_expansion.events.VanillaBarrels;
 import com.leclowndu93150.barrel_expansion.registry.BarrelRegistries;
 import net.mehvahdjukaar.moonlight.api.platform.RegHelper;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
