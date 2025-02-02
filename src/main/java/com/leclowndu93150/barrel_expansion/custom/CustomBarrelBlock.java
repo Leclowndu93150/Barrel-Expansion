@@ -6,9 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.player.Player;
@@ -31,8 +29,8 @@ public class CustomBarrelBlock extends BaseEntityBlock {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
     private final String registryName;
 
-    public static final MapCodec<CustomBarrelBlock> CODEC = simpleCodec(p ->
-            new CustomBarrelBlock(p, "coded_barrel"));
+    public static final MapCodec<CustomBarrelBlock> CODEC = simpleCodec((properties) ->
+            new CustomBarrelBlock(properties, "coded_barrel"));
 
     public CustomBarrelBlock(Properties properties, String name) {
         super(properties);
@@ -62,23 +60,21 @@ public class CustomBarrelBlock extends BaseEntityBlock {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
+
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof CustomBarrelBlockEntity) {
             player.openMenu((CustomBarrelBlockEntity)blockEntity);
             player.awardStat(Stats.OPEN_BARREL);
             PiglinAi.angerNearbyPiglins(player, true);
         }
+
         return InteractionResult.CONSUME;
     }
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-            if (blockEntity instanceof Container) {
-                Containers.dropContents(level, pos, (Container)blockEntity);
-                level.updateNeighbourForOutputSignal(pos, this);
-            }
+            Containers.dropContentsOnDestroy(state, newState, level, pos);
             super.onRemove(state, level, pos, newState, isMoving);
         }
     }
