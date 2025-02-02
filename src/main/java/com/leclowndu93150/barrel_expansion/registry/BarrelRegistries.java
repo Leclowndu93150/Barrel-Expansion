@@ -88,10 +88,12 @@ public class BarrelRegistries {
             DeferredBlock<CustomBarrelBlock> block,
             DeferredItem<BlockItem> blockItem,
             DeferredHolder<BlockEntityType<?>, BlockEntityType<CustomBarrelBlockEntity>> blockEntity
-    ) {}
+    ) {
+    }
 
     public record DirectBarrelRegistryGroup(
             CustomBarrelBlock block,
             BlockEntityType<CustomBarrelBlockEntity> blockEntity
-    ) {}
+    ) {
+    }
 }

@@ -73,12 +73,37 @@ public class BarrelResourceGenerator extends DynClientResourcesGenerator {
         }
     }
 
-    private TextureImage getPlankTexture(ResourceManager manager, ResourceLocation planksId) throws Exception {
-        ResourceLocation modelLoc = ResourceLocation.fromNamespaceAndPath(planksId.getNamespace(), "models/block/" + planksId.getPath() + ".json");
-        try (InputStream modelStream = manager.getResource(modelLoc).orElseThrow().open()) {
-            JsonObject model = JsonParser.parseReader(new InputStreamReader(modelStream)).getAsJsonObject();
-            String texturePath = model.getAsJsonObject("textures").get("all").getAsString();
-            return TextureImage.open(manager, ResourceLocation.parse(texturePath));
+    private TextureImage getPlankTexture(ResourceManager manager, ResourceLocation planksId) {
+        try {
+            ResourceLocation modelLoc = ResourceLocation.fromNamespaceAndPath(planksId.getNamespace(), "models/block/" + planksId.getPath() + ".json");
+
+            var modelResource = manager.getResource(modelLoc);
+            if (modelResource.isEmpty()) {
+                LOGGER.warn("No model found for {}, skipping", planksId);
+                return null;
+            }
+
+            try (InputStream modelStream = modelResource.get().open()) {
+                JsonObject model = JsonParser.parseReader(new InputStreamReader(modelStream)).getAsJsonObject();
+
+                JsonObject textures = model.getAsJsonObject("textures");
+                if (textures == null || !textures.has("all")) {
+                    LOGGER.warn("No valid texture entry found in model for {}", planksId);
+                    return null;
+                }
+
+                String texturePath = textures.get("all").getAsString();
+                var textureImage = TextureImage.open(manager, ResourceLocation.parse(texturePath));
+                if (textureImage == null) {
+                    LOGGER.warn("Could not load texture {} for {}", texturePath, planksId);
+                    return null;
+                }
+
+                return textureImage;
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failed to get plank texture for {}: {}", planksId, e.getMessage());
+            return null;
         }
     }
 

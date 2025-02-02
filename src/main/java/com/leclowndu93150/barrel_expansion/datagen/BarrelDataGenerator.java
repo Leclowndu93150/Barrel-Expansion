@@ -45,6 +45,8 @@ public class BarrelDataGenerator extends DynServerResourcesGenerator {
                 false
         ));
         this.dynamicPack.setGenerateDebugResources(PlatHelper.isDev());
+        this.dynamicPack.addNamespaces("c");
+        this.dynamicPack.addNamespaces("minecraft");
     }
 
     private JsonObject createLootTable(ResourceLocation itemId) {
